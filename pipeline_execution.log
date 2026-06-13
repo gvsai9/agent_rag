@@ -1,0 +1,248 @@
+[2026-06-13 20:04:41] INFO [ingestion_pipeline.search_arxiv:29] Searching arXiv for query: 'RAG' with limit: 1
+[2026-06-13 20:04:43] INFO [ingestion_pipeline.search_arxiv:62] Found 1 papers on arXiv for query: 'RAG'
+[2026-06-13 20:04:43] INFO [ingestion_pipeline.download_pdf:20] Attempting to download PDF for arXiv ID: 2606.13680v1 from URL: https://arxiv.org/pdf/2606.13680v1
+[2026-06-13 20:04:45] INFO [ingestion_pipeline.download_pdf:32] Successfully downloaded PDF for arXiv ID: 2606.13680v1 from URL: https://arxiv.org/pdf/2606.13680v1
+[2026-06-13 20:04:45] INFO [ingestion_pipeline.download_pdf:41] Saved PDF for arXiv ID: 2606.13680v1 to path: downloads\2606.13680v1.pdf
+[2026-06-13 20:04:45] INFO [ingestion_pipeline.parse_pdf:34] Starting PDF parsing for file: downloads\2606.13680v1.pdf using Docling with PyPdfium backend
+[2026-06-13 20:06:31] INFO [ingestion_pipeline.parse_pdf:38] Completed PDF parsing for file: downloads\2606.13680v1.pdf. Generated markdown length: 53747 characters
+[2026-06-13 20:06:31] INFO [ingestion_pipeline.save_markdown:44] Saving markdown for arXiv ID: 2606.13680v1 to disk. Markdown length: 53747 characters
+[2026-06-13 20:06:31] INFO [ingestion_pipeline.save_markdown:62] Markdown for arXiv ID: 2606.13680v1 saved to path: parsed\2606.13680v1.md
+[2026-06-13 20:06:31] INFO [ingestion_pipeline.markdown_to_parsed_paper:16] Starting markdown parsing for file: parsed\2606.13680v1.md
+[2026-06-13 20:06:31] INFO [ingestion_pipeline.markdown_to_parsed_paper:101] Completed markdown parsing for file: parsed\2606.13680v1.md
+[2026-06-13 20:06:31] INFO [ingestion_pipeline.chunk_paper:20] Chunking paper 2606.13680v1 with title: 'Learning to Reason by Analogy via Retrieval-Augmented Reinforcement Fine-Tuning'
+[2026-06-13 20:06:31] INFO [ingestion_pipeline.chunk_paper:98] Created 32 chunks for paper 2606.13680v1
+[2026-06-13 20:06:31] INFO [ingestion_pipeline.get_by_paper_id:24] Retrieving paper with Paper ID: 2606.13680v1
+[2026-06-13 20:06:31] INFO [ingestion_pipeline.upsert:52] Upserting paper with Paper ID: 2606.13680v1
+[2026-06-13 20:06:31] INFO [ingestion_pipeline.upsert:78] Successfully upserted paper with Paper ID: 2606.13680v1
+[2026-06-13 20:06:31] INFO [ingestion_pipeline.upsert_many:25] Upserting 32 chunks into the database
+[2026-06-13 20:06:31] INFO [ingestion_pipeline.upsert_many:56] Successfully upserted 32 chunks into the database
+[2026-06-13 20:06:31] INFO [ingestion_pipeline.create_jobs:32] Creating ingestion jobs for 32 chunks
+[2026-06-13 20:06:31] INFO [ingestion_pipeline.create_jobs:81] Successfully created ingestion jobs for 32 chunks
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.run_batch:95] Starting embedding worker batch with size: 100
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.get_next_queued_jobs:136] Retrieving next 100 queued jobs
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.get_next_queued_jobs:153] Successfully retrieved 32 queued jobs
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.run_batch:105] Jobs found and started execution:-
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 140 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 141 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 142 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 143 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 144 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 145 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 146 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 147 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 148 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 149 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 150 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 151 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 152 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 153 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 154 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 155 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 156 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 157 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 158 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 159 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 160 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 161 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 162 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 163 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 164 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 165 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 166 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 167 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 168 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 169 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 170 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 171 as processing
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.get_chunks_by_ids:62] Retrieving 32 chunks from the database
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.get_chunks_by_ids:81] Successfully retrieved 32 chunks from the database
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.run_batch:124] Chunks are created for the job:
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.run_batch:142] Text is build for the chunks
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.run_batch:143] Sample text fTitle:
+Learning to Reason by Analogy via Retrieval-Augmented Reinforcement Fine-Tuning
+
+Year:
+2026
+
+Section:
+Learning to Reason by Analogy via Retrieval-Augmented Reinforcement Fine-Tuning
+
+Content:
+Zilin Xiao 1 , 2 , ∗ , Qi Ma 1 , Jason Chen 1 , Xintao Chen 1 , Avinash Atreya 1 , Hanjie Chen 2 , Vicente Ordonez 2
+
+1 Meta Superintelligence Labs, 2 Rice University
+
+∗ Work partially done during internship at Meta
+
+Retrieval-augmented generation (RAG) has become a standard mechanism for grounding language models in external knowledge, yet conventional retrieval based on lexical or semantic similarity is poorly suited for complex reasoning tasks: a semantically similar problem may demand an entirely different solution strategy, while a superficially different problem may share the same underlying reasoning pattern. We propose Retrieval-Augmented Reinforcement Fine-Tuning (RA-RFT), a posttraining framework that teaches language models to reason by analogy. RA-RFT uses gold-relevance distillation to train a retriever that ranks contexts by expected reasoning benefit rather than semantic overlap, and then fine-tunes the policy model via reinforcement fine-tuning methods with retrieved analogous demonstrations, so the model learns to leverage reasoning traces under verifiable outcome rewards. We further analyze the diversity of retrieved contexts and find that reasoning-aware retrieval surfaces complementary solution strategies that provide distinct reasoning scaffolds for individual problems. Across challenging mathematical reasoning benchmarks, RA-RFT consistently outperforms standard reinforcement fine-tuning methods. For example, it improves AIME 2025 average@32 accuracy by 7.1 and 2.8 points over GRPO for Qwen3-1.7B and Qwen3-4B respectively—suggesting that reasoning-aware retrieval is a complementary axis of improvement and orthogonal to advances in reward design or training curricula.
+
+Date: June 12, 2026
+
+Correspondence: Zilin Xiao at zilin@meta.com
+[2026-06-13 20:06:35] INFO [ingestion_pipeline.run_batch:145] vectors are being created
+[2026-06-13 20:06:37] INFO [ingestion_pipeline.run_batch:162] vectors arecreated
+[2026-06-13 20:06:37] INFO [ingestion_pipeline.run_batch:163] payloads are being created
+[2026-06-13 20:06:37] INFO [ingestion_pipeline.run_batch:171] payloads are created
+[2026-06-13 20:06:37] INFO [ingestion_pipeline.upsert:44] Upserting 32 vectors to Pinecone index 'agent-research-rag'
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.upsert:48] Successfully upserted 32 vectors to Pinecone index 'agent-research-rag'
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.run_batch:176] payload is upserted
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 140 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 141 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 142 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 143 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 144 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 145 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 146 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 147 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 148 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 149 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 150 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 151 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 152 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 153 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 154 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 155 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 156 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 157 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 158 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 159 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 160 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 161 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 162 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 163 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 164 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 165 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 166 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 167 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 168 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 169 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 170 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.mark_completed:106] Marking job 171 as completed
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.run_batch:95] Starting embedding worker batch with size: 100
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.get_next_queued_jobs:136] Retrieving next 100 queued jobs
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.get_next_queued_jobs:153] Successfully retrieved 0 queued jobs
+[2026-06-13 20:06:40] INFO [ingestion_pipeline.run_batch:103] No Jobs havr been found
+[2026-06-13 20:38:42] INFO [ingestion_pipeline.search_arxiv:29] Searching arXiv for query: 'RAG' with limit: 1
+[2026-06-13 20:38:43] INFO [ingestion_pipeline.search_arxiv:62] Found 1 papers on arXiv for query: 'RAG'
+[2026-06-13 20:38:43] INFO [ingestion_pipeline.download_pdf:20] Attempting to download PDF for arXiv ID: 2606.13680v1 from URL: https://arxiv.org/pdf/2606.13680v1
+[2026-06-13 20:38:46] INFO [ingestion_pipeline.download_pdf:32] Successfully downloaded PDF for arXiv ID: 2606.13680v1 from URL: https://arxiv.org/pdf/2606.13680v1
+[2026-06-13 20:38:46] INFO [ingestion_pipeline.download_pdf:41] Saved PDF for arXiv ID: 2606.13680v1 to path: downloads\2606.13680v1.pdf
+[2026-06-13 20:38:46] INFO [ingestion_pipeline.parse_pdf:34] Starting PDF parsing for file: downloads\2606.13680v1.pdf using Docling with PyPdfium backend
+[2026-06-13 20:39:53] INFO [ingestion_pipeline.parse_pdf:38] Completed PDF parsing for file: downloads\2606.13680v1.pdf. Generated markdown length: 53747 characters
+[2026-06-13 20:39:53] INFO [ingestion_pipeline.save_markdown:44] Saving markdown for arXiv ID: 2606.13680v1 to disk. Markdown length: 53747 characters
+[2026-06-13 20:39:53] INFO [ingestion_pipeline.save_markdown:62] Markdown for arXiv ID: 2606.13680v1 saved to path: parsed\2606.13680v1.md
+[2026-06-13 20:39:53] INFO [ingestion_pipeline.markdown_to_parsed_paper:16] Starting markdown parsing for file: parsed\2606.13680v1.md
+[2026-06-13 20:39:53] INFO [ingestion_pipeline.markdown_to_parsed_paper:101] Completed markdown parsing for file: parsed\2606.13680v1.md
+[2026-06-13 20:39:53] INFO [ingestion_pipeline.chunk_paper:20] Chunking paper 2606.13680v1 with title: 'Learning to Reason by Analogy via Retrieval-Augmented Reinforcement Fine-Tuning'
+[2026-06-13 20:39:53] INFO [ingestion_pipeline.chunk_paper:98] Created 32 chunks for paper 2606.13680v1
+[2026-06-13 20:39:53] INFO [ingestion_pipeline.get_by_paper_id:24] Retrieving paper with Paper ID: 2606.13680v1
+[2026-06-13 20:39:57] INFO [ingestion_pipeline.upsert:52] Upserting paper with Paper ID: 2606.13680v1
+[2026-06-13 20:39:57] INFO [ingestion_pipeline.upsert:78] Successfully upserted paper with Paper ID: 2606.13680v1
+[2026-06-13 20:39:57] INFO [ingestion_pipeline.upsert_many:25] Upserting 32 chunks into the database
+[2026-06-13 20:40:05] INFO [ingestion_pipeline.upsert_many:56] Successfully upserted 32 chunks into the database
+[2026-06-13 20:40:05] INFO [ingestion_pipeline.create_jobs:32] Creating ingestion jobs for 32 chunks
+[2026-06-13 20:40:13] INFO [ingestion_pipeline.create_jobs:81] Successfully created ingestion jobs for 32 chunks
+[2026-06-13 20:40:19] INFO [ingestion_pipeline.run_batch:95] Starting embedding worker batch with size: 100
+[2026-06-13 20:40:19] INFO [ingestion_pipeline.get_next_queued_jobs:136] Retrieving next 100 queued jobs
+[2026-06-13 20:40:19] INFO [ingestion_pipeline.get_next_queued_jobs:153] Successfully retrieved 32 queued jobs
+[2026-06-13 20:40:19] INFO [ingestion_pipeline.run_batch:105] Jobs found and started execution:-
+[2026-06-13 20:40:19] INFO [ingestion_pipeline.mark_processing:91] Marking job 1 as processing
+[2026-06-13 20:40:20] INFO [ingestion_pipeline.mark_processing:91] Marking job 2 as processing
+[2026-06-13 20:40:21] INFO [ingestion_pipeline.mark_processing:91] Marking job 3 as processing
+[2026-06-13 20:40:22] INFO [ingestion_pipeline.mark_processing:91] Marking job 4 as processing
+[2026-06-13 20:40:23] INFO [ingestion_pipeline.mark_processing:91] Marking job 5 as processing
+[2026-06-13 20:40:24] INFO [ingestion_pipeline.mark_processing:91] Marking job 6 as processing
+[2026-06-13 20:40:24] INFO [ingestion_pipeline.mark_processing:91] Marking job 7 as processing
+[2026-06-13 20:40:25] INFO [ingestion_pipeline.mark_processing:91] Marking job 8 as processing
+[2026-06-13 20:40:26] INFO [ingestion_pipeline.mark_processing:91] Marking job 9 as processing
+[2026-06-13 20:40:27] INFO [ingestion_pipeline.mark_processing:91] Marking job 10 as processing
+[2026-06-13 20:40:28] INFO [ingestion_pipeline.mark_processing:91] Marking job 11 as processing
+[2026-06-13 20:40:29] INFO [ingestion_pipeline.mark_processing:91] Marking job 12 as processing
+[2026-06-13 20:40:30] INFO [ingestion_pipeline.mark_processing:91] Marking job 13 as processing
+[2026-06-13 20:40:31] INFO [ingestion_pipeline.mark_processing:91] Marking job 14 as processing
+[2026-06-13 20:40:32] INFO [ingestion_pipeline.mark_processing:91] Marking job 15 as processing
+[2026-06-13 20:40:33] INFO [ingestion_pipeline.mark_processing:91] Marking job 16 as processing
+[2026-06-13 20:40:34] INFO [ingestion_pipeline.mark_processing:91] Marking job 17 as processing
+[2026-06-13 20:40:35] INFO [ingestion_pipeline.mark_processing:91] Marking job 18 as processing
+[2026-06-13 20:40:36] INFO [ingestion_pipeline.mark_processing:91] Marking job 19 as processing
+[2026-06-13 20:40:37] INFO [ingestion_pipeline.mark_processing:91] Marking job 20 as processing
+[2026-06-13 20:40:37] INFO [ingestion_pipeline.mark_processing:91] Marking job 21 as processing
+[2026-06-13 20:40:38] INFO [ingestion_pipeline.mark_processing:91] Marking job 22 as processing
+[2026-06-13 20:40:39] INFO [ingestion_pipeline.mark_processing:91] Marking job 23 as processing
+[2026-06-13 20:40:40] INFO [ingestion_pipeline.mark_processing:91] Marking job 24 as processing
+[2026-06-13 20:40:41] INFO [ingestion_pipeline.mark_processing:91] Marking job 25 as processing
+[2026-06-13 20:40:42] INFO [ingestion_pipeline.mark_processing:91] Marking job 26 as processing
+[2026-06-13 20:40:43] INFO [ingestion_pipeline.mark_processing:91] Marking job 27 as processing
+[2026-06-13 20:40:44] INFO [ingestion_pipeline.mark_processing:91] Marking job 28 as processing
+[2026-06-13 20:40:45] INFO [ingestion_pipeline.mark_processing:91] Marking job 29 as processing
+[2026-06-13 20:40:46] INFO [ingestion_pipeline.mark_processing:91] Marking job 30 as processing
+[2026-06-13 20:40:47] INFO [ingestion_pipeline.mark_processing:91] Marking job 31 as processing
+[2026-06-13 20:40:48] INFO [ingestion_pipeline.mark_processing:91] Marking job 32 as processing
+[2026-06-13 20:40:56] INFO [ingestion_pipeline.get_chunks_by_ids:62] Retrieving 32 chunks from the database
+[2026-06-13 20:40:58] INFO [ingestion_pipeline.get_chunks_by_ids:81] Successfully retrieved 32 chunks from the database
+[2026-06-13 20:40:58] INFO [ingestion_pipeline.run_batch:124] Chunks are created for the job:
+[2026-06-13 20:40:58] INFO [ingestion_pipeline.run_batch:142] Text is build for the chunks
+[2026-06-13 20:40:58] INFO [ingestion_pipeline.run_batch:143] Sample text fTitle:
+Learning to Reason by Analogy via Retrieval-Augmented Reinforcement Fine-Tuning
+
+Year:
+2026
+
+Section:
+Learning to Reason by Analogy via Retrieval-Augmented Reinforcement Fine-Tuning
+
+Content:
+Zilin Xiao 1 , 2 , ∗ , Qi Ma 1 , Jason Chen 1 , Xintao Chen 1 , Avinash Atreya 1 , Hanjie Chen 2 , Vicente Ordonez 2
+
+1 Meta Superintelligence Labs, 2 Rice University
+
+∗ Work partially done during internship at Meta
+
+Retrieval-augmented generation (RAG) has become a standard mechanism for grounding language models in external knowledge, yet conventional retrieval based on lexical or semantic similarity is poorly suited for complex reasoning tasks: a semantically similar problem may demand an entirely different solution strategy, while a superficially different problem may share the same underlying reasoning pattern. We propose Retrieval-Augmented Reinforcement Fine-Tuning (RA-RFT), a posttraining framework that teaches language models to reason by analogy. RA-RFT uses gold-relevance distillation to train a retriever that ranks contexts by expected reasoning benefit rather than semantic overlap, and then fine-tunes the policy model via reinforcement fine-tuning methods with retrieved analogous demonstrations, so the model learns to leverage reasoning traces under verifiable outcome rewards. We further analyze the diversity of retrieved contexts and find that reasoning-aware retrieval surfaces complementary solution strategies that provide distinct reasoning scaffolds for individual problems. Across challenging mathematical reasoning benchmarks, RA-RFT consistently outperforms standard reinforcement fine-tuning methods. For example, it improves AIME 2025 average@32 accuracy by 7.1 and 2.8 points over GRPO for Qwen3-1.7B and Qwen3-4B respectively—suggesting that reasoning-aware retrieval is a complementary axis of improvement and orthogonal to advances in reward design or training curricula.
+
+Date: June 12, 2026
+
+Correspondence: Zilin Xiao at zilin@meta.com
+[2026-06-13 20:40:58] INFO [ingestion_pipeline.run_batch:145] vectors are being created
+[2026-06-13 20:41:01] INFO [ingestion_pipeline.run_batch:162] vectors arecreated
+[2026-06-13 20:41:01] INFO [ingestion_pipeline.run_batch:163] payloads are being created
+[2026-06-13 20:41:01] INFO [ingestion_pipeline.run_batch:171] payloads are created
+[2026-06-13 20:41:01] INFO [ingestion_pipeline.upsert:44] Upserting 32 vectors to Pinecone index 'agent-research-rag'
+[2026-06-13 20:41:03] INFO [ingestion_pipeline.upsert:48] Successfully upserted 32 vectors to Pinecone index 'agent-research-rag'
+[2026-06-13 20:41:03] INFO [ingestion_pipeline.run_batch:176] payload is upserted
+[2026-06-13 20:41:03] INFO [ingestion_pipeline.mark_completed:106] Marking job 1 as completed
+[2026-06-13 20:41:04] INFO [ingestion_pipeline.mark_completed:106] Marking job 2 as completed
+[2026-06-13 20:41:05] INFO [ingestion_pipeline.mark_completed:106] Marking job 3 as completed
+[2026-06-13 20:41:06] INFO [ingestion_pipeline.mark_completed:106] Marking job 4 as completed
+[2026-06-13 20:41:06] INFO [ingestion_pipeline.mark_completed:106] Marking job 5 as completed
+[2026-06-13 20:41:07] INFO [ingestion_pipeline.mark_completed:106] Marking job 6 as completed
+[2026-06-13 20:41:08] INFO [ingestion_pipeline.mark_completed:106] Marking job 7 as completed
+[2026-06-13 20:41:09] INFO [ingestion_pipeline.mark_completed:106] Marking job 8 as completed
+[2026-06-13 20:41:10] INFO [ingestion_pipeline.mark_completed:106] Marking job 9 as completed
+[2026-06-13 20:41:11] INFO [ingestion_pipeline.mark_completed:106] Marking job 10 as completed
+[2026-06-13 20:41:12] INFO [ingestion_pipeline.mark_completed:106] Marking job 11 as completed
+[2026-06-13 20:41:13] INFO [ingestion_pipeline.mark_completed:106] Marking job 12 as completed
+[2026-06-13 20:41:14] INFO [ingestion_pipeline.mark_completed:106] Marking job 13 as completed
+[2026-06-13 20:41:15] INFO [ingestion_pipeline.mark_completed:106] Marking job 14 as completed
+[2026-06-13 20:41:15] INFO [ingestion_pipeline.mark_completed:106] Marking job 15 as completed
+[2026-06-13 20:41:16] INFO [ingestion_pipeline.mark_completed:106] Marking job 16 as completed
+[2026-06-13 20:41:17] INFO [ingestion_pipeline.mark_completed:106] Marking job 17 as completed
+[2026-06-13 20:41:18] INFO [ingestion_pipeline.mark_completed:106] Marking job 18 as completed
+[2026-06-13 20:41:19] INFO [ingestion_pipeline.mark_completed:106] Marking job 19 as completed
+[2026-06-13 20:41:20] INFO [ingestion_pipeline.mark_completed:106] Marking job 20 as completed
+[2026-06-13 20:41:21] INFO [ingestion_pipeline.mark_completed:106] Marking job 21 as completed
+[2026-06-13 20:41:22] INFO [ingestion_pipeline.mark_completed:106] Marking job 22 as completed
+[2026-06-13 20:41:23] INFO [ingestion_pipeline.mark_completed:106] Marking job 23 as completed
+[2026-06-13 20:41:24] INFO [ingestion_pipeline.mark_completed:106] Marking job 24 as completed
+[2026-06-13 20:41:24] INFO [ingestion_pipeline.mark_completed:106] Marking job 25 as completed
+[2026-06-13 20:41:25] INFO [ingestion_pipeline.mark_completed:106] Marking job 26 as completed
+[2026-06-13 20:41:26] INFO [ingestion_pipeline.mark_completed:106] Marking job 27 as completed
+[2026-06-13 20:41:27] INFO [ingestion_pipeline.mark_completed:106] Marking job 28 as completed
+[2026-06-13 20:41:28] INFO [ingestion_pipeline.mark_completed:106] Marking job 29 as completed
+[2026-06-13 20:41:29] INFO [ingestion_pipeline.mark_completed:106] Marking job 30 as completed
+[2026-06-13 20:41:30] INFO [ingestion_pipeline.mark_completed:106] Marking job 31 as completed
+[2026-06-13 20:41:31] INFO [ingestion_pipeline.mark_completed:106] Marking job 32 as completed
+[2026-06-13 20:41:31] INFO [ingestion_pipeline.run_batch:95] Starting embedding worker batch with size: 100
+[2026-06-13 20:41:31] INFO [ingestion_pipeline.get_next_queued_jobs:136] Retrieving next 100 queued jobs
+[2026-06-13 20:41:32] INFO [ingestion_pipeline.get_next_queued_jobs:153] Successfully retrieved 0 queued jobs
+[2026-06-13 20:41:32] INFO [ingestion_pipeline.run_batch:103] No Jobs havr been found
