@@ -13,6 +13,7 @@ from embeddings.jina_provider import (
 from vectorstores.pinecone_client import (
     PineconeClient 
 )
+from langsmith import traceable
 
 from utils.logging_config import setup_pipeline_logger
 
@@ -87,7 +88,7 @@ Content:
             )
 
         return payload
-
+    @traceable(name="embedding batch")
     def run_batch(
         self,
         batch_size: int = 5

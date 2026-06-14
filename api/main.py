@@ -1,48 +1,66 @@
-import os
-import json
 import time
 import traceback
 from fastapi import FastAPI, Depends, HTTPException
-from fastapi.responses import StreamingResponse
-from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-
+import os
 from database.session import SessionLocal
 from api.schemas import QueryRequest, QueryResponse, SourceResponse
+from fastapi.middleware.cors import CORSMiddleware
 
-# Core cloud AI providers & clients
+# FIXED TYPOS: Corrected 'retrival' to 'retrieval' package paths
 from embeddings.jina_provider import JinaEmbeddingProvider
 from vectorstores.pinecone_client import PineconeClient
-from reranking.jina_reranker import JinaReranker
-from generation.openrouter_generator import OpenRouterGenerator
-
-# Retrieval and Orchestration components
 from repositories.chunk_repository import ChunkRepository
 from retrival.retrival import Retriever
-from retrival.hybrid_retrival import HybridRetriever
 from retrival.context_builder import ContextBuilder
+from generation.openrouter_generator import OpenRouterGenerator
 from generation.rag_pipeline import RAGPipeline
-
-app = FastAPI(
-    title="Agentic AI Research Platform",
-    version="1.0.0"
+from fastapi.responses import (
+    StreamingResponse
 )
+from retrival.graph_retrival import GraphRetriever
+from reranking.jina_reranker import JinaReranker
+import json
+from knowledge_graph.entity_extractor import EntityExtractor
 
-# Enable CORS so your hosted Lovable frontend can talk to Render safely
+app = FastAPI(title="Agentic AI Research Platform", version="1.0.0")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  
+    allow_origins=["*"],  # Allows your hosted Lovable app to talk to your local backend safely
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+from retrival.hybrid_retrival import HybridRetriever
+from embeddings.jina_provider import JinaEmbeddingProvider
+from repositories.ingestion_repository import IngestionRepository
+from workers.embedding_worker import EmbeddingWorker
+from api.schemas import (
+    IngestRequest
+)
 
-# Thread-safe cloud gateway singletons
+from chunking.chunker import (
+    chunk_paper
+)
+
+from knowledge_graph.neo4j_client import (
+    get_graph_ingestor
+)
+# -----------------------------
+# Global singletons (Thread-Safe)
+# -----------------------------
 embedding_provider = JinaEmbeddingProvider()
 pinecone_client = PineconeClient()
 generator = OpenRouterGenerator()
 reranker = JinaReranker()
-
+graph_retriever = GraphRetriever(
+    get_graph_ingestor().driver
+)
+entity_extractor = EntityExtractor()
+# -----------------------------
+# Database dependency
+# -----------------------------
 def get_db():
     db = SessionLocal()
     try:
@@ -50,16 +68,23 @@ def get_db():
     finally:
         db.close()
 
+# -----------------------------
+# Health Check
+# -----------------------------
 @app.get("/health")
 def health():
     return {"status": "healthy"}
 
+# -----------------------------
+# Standard Query Endpoint (Unified Setup)
+# -----------------------------
 @app.post("/query", response_model=QueryResponse)
 def query(request: QueryRequest, db: Session = Depends(get_db)):
     chunk_repo = ChunkRepository(db)
     try:
         start = time.time()
 
+        # 1. Instantiate the identical retrieval matching stack
         base_vector_retriever = Retriever(
             embedding_provider=embedding_provider,
             pinecone_client=pinecone_client,
@@ -68,9 +93,11 @@ def query(request: QueryRequest, db: Session = Depends(get_db)):
 
         hybrid_engine = HybridRetriever(
             vector_retriever=base_vector_retriever,
-            chunk_repo=chunk_repo
+            chunk_repo=chunk_repo,
+            graph_retriever=graph_retriever
         )
 
+        # 2. Inject requirements via constructor parameters
         pipeline = RAGPipeline(
             retriever=hybrid_engine,
             context_builder=ContextBuilder(),
@@ -78,13 +105,16 @@ def query(request: QueryRequest, db: Session = Depends(get_db)):
             reranker=reranker
         )
 
+        # 3. Fire full pass (Deduplication occurs natively inside prepare)
         context, sources = pipeline.prepare(
             query=request.question,
             top_k=request.top_k
         )
         
+        # Use your dedicated .ask component fallback mapping if required, or direct generate:
         answer = generator.generate(query=request.question, context=context)
 
+        # 4. Consistent, type-safe mapping loop
         serialized_sources = [
             SourceResponse(
                 title=src.title,
@@ -97,12 +127,24 @@ def query(request: QueryRequest, db: Session = Depends(get_db)):
             for src in sources
         ]
 
-        print(f"🚀 Standard query completed in {time.time() - start:.2f}s")
-        return QueryResponse(answer=answer, sources=serialized_sources)
+        elapsed = time.time() - start
+        print(f"🚀 Standard query completed in {elapsed:.2f}s")
+
+        return QueryResponse(
+            answer=answer,
+            sources=serialized_sources
+        )
 
     except Exception as e:
+
+        import traceback
+
         traceback.print_exc()
-        raise HTTPException(status_code=500, detail=str(e))
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )
 
 @app.post("/stream")
 def stream_query(request: QueryRequest, db: Session = Depends(get_db)):
@@ -116,7 +158,8 @@ def stream_query(request: QueryRequest, db: Session = Depends(get_db)):
 
         hybrid_engine = HybridRetriever(
             vector_retriever=base_vector_retriever,
-            chunk_repo=chunk_repo
+            chunk_repo=chunk_repo,
+            graph_retriever=graph_retriever
         )
 
         pipeline = RAGPipeline(
@@ -125,12 +168,11 @@ def stream_query(request: QueryRequest, db: Session = Depends(get_db)):
             generator=generator,
             reranker=reranker
         )
-
+        # Execute upfront heavy I/O operations cleanly before streaming loop starts
         context, sources = pipeline.prepare(
             query=request.question,
             top_k=request.top_k
         )
-
         serialized_sources = [
             {
                 "title": src.title,
@@ -138,19 +180,24 @@ def stream_query(request: QueryRequest, db: Session = Depends(get_db)):
                 "year": src.year,
                 "section": getattr(src, 'section_title', getattr(src, 'section', 'Unknown')),
                 "score": getattr(src, 'score', 0.0),
-                "paper_url": src.paper_url 
+                "paper_url": src.paper_url ,
+    
             }
             for src in sources
         ]
 
         def event_stream():
             try:
+                # FIXED: Structured initial sources packet
                 yield f"data: {json.dumps({'type': 'sources', 'data': serialized_sources})}\n\n"
 
+                # Stream out individual text updates
                 for token in pipeline.stream(query=request.question, context=context):
                     yield f"data: {json.dumps({'type': 'token', 'data': token})}\n\n"
 
+                # FIXED: Explicit completion signal for frontend event triggers
                 yield f"data: {json.dumps({'type': 'done'})}\n\n"
+
             except Exception as stream_err:
                 yield f"data: {json.dumps({'type': 'error', 'data': str(stream_err)})}\n\n"
 
@@ -158,3 +205,49 @@ def stream_query(request: QueryRequest, db: Session = Depends(get_db)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+@app.post("/process-jobs")
+def process_jobs(
+    db: Session = Depends(get_db)
+):
+
+    try:
+
+        worker = EmbeddingWorker(
+            ingestion_repo=
+                IngestionRepository(db),
+
+            chunk_repo=
+                ChunkRepository(db),
+
+            provider=
+                embedding_provider,
+
+            pinecone_client=
+                pinecone_client
+        )
+
+        total_processed = 0
+
+        while True:
+
+            processed = worker.run_batch(
+                batch_size=100
+            )
+
+            total_processed += processed
+
+            if processed == 0:
+                break
+
+        return {
+            "status": "success",
+            "vectors_uploaded":
+                total_processed
+        }
+
+    except Exception as e:
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )

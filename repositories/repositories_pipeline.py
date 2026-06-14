@@ -4,6 +4,7 @@ from utils.logging_config import setup_pipeline_logger
 
 # Instantiate the module-level logger at the top of the file
 logger = setup_pipeline_logger("ingestion_pipeline")
+from langsmith import traceable
 
 class RepositoriesPipeline:
 
@@ -17,7 +18,7 @@ class RepositoriesPipeline:
         self.chunk_repo = chunk_repo
         self.ingestion_repo = ingestion_repo
 
-
+    @traceable(name="pesistance")
     def persist(
     self,
     parsed_paper,

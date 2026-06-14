@@ -4,10 +4,12 @@ class HybridRetriever:
     def __init__(
         self,
         vector_retriever,
-        chunk_repo
+        chunk_repo,
+        graph_retriever
     ):
         self.vector_retriever = vector_retriever
         self.chunk_repo = chunk_repo
+        self.graph_retriever = graph_retriever
 
     @traceable
     def retrieve(self, query: str, top_k: int):
@@ -22,7 +24,12 @@ class HybridRetriever:
             query,
             limit=20
         )
-
+        graph_results = (
+            self.graph_retriever.retrieve(
+                query=query,
+                limit=20
+            )
+        )
         combined = {}
 
         # 3. Add vector results to dictionary (r is a SearchResult model, so .chunk_id works)
@@ -34,6 +41,13 @@ class HybridRetriever:
             # Check if we already have this chunk from vector search to prevent overwriting clean objects
             if row.chunk_id in combined:
                 continue
+        for r in graph_results:
+
+            if r.chunk_id not in combined:
+
+                combined[
+                    r.chunk_id
+                ] = r
 
             # Convert row on-the-fly to a mutable SearchResult model so the reranker can add attributes
             combined[row.chunk_id] = SearchResult(

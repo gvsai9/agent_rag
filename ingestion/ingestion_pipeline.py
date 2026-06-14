@@ -19,9 +19,10 @@ from chunking.chunker import (
     chunk_paper
 )
 import os
+from langsmith import traceable
 
 class IngestionPipeline:
-
+    @traceable(name="arxiv ingestion")
     def ingest_query(
         self,
         query: str,

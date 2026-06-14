@@ -6,6 +6,7 @@ import os
 from database.session import SessionLocal
 from api.schemas import QueryRequest, QueryResponse, SourceResponse
 from fastapi.middleware.cors import CORSMiddleware
+from langsmith import traceable
 
 # FIXED TYPOS: Corrected 'retrival' to 'retrieval' package paths
 from embeddings.jina_provider import JinaEmbeddingProvider
@@ -18,17 +19,13 @@ from generation.rag_pipeline import RAGPipeline
 from fastapi.responses import (
     StreamingResponse
 )
+from retrival.graph_retrival import GraphRetriever
 from reranking.jina_reranker import JinaReranker
 import json
-app = FastAPI(title="Agentic AI Research Platform", version="1.0.0")
+from knowledge_graph.entity_extractor import EntityExtractor
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Allows your hosted Lovable app to talk to your local backend safely
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+app = FastAPI(title="local", version="1.0.0")
+
 from retrival.hybrid_retrival import HybridRetriever
 from embeddings.jina_provider import JinaEmbeddingProvider
 from ingestion.ingestion_pipeline import IngestionPipeline
@@ -54,6 +51,10 @@ embedding_provider = JinaEmbeddingProvider()
 pinecone_client = PineconeClient()
 generator = OpenRouterGenerator()
 reranker = JinaReranker()
+graph_retriever = GraphRetriever(
+    get_graph_ingestor().driver
+)
+entity_extractor = EntityExtractor()
 # -----------------------------
 # Database dependency
 # -----------------------------
@@ -89,7 +90,8 @@ def query(request: QueryRequest, db: Session = Depends(get_db)):
 
         hybrid_engine = HybridRetriever(
             vector_retriever=base_vector_retriever,
-            chunk_repo=chunk_repo
+            chunk_repo=chunk_repo,
+            graph_retriever=graph_retriever
         )
 
         # 2. Inject requirements via constructor parameters
@@ -131,10 +133,14 @@ def query(request: QueryRequest, db: Session = Depends(get_db)):
         )
 
     except Exception as e:
+
+        import traceback
+
         traceback.print_exc()
+
         raise HTTPException(
             status_code=500,
-            detail=f"Internal RAG Execution Error: {str(e)}"
+            detail=str(e)
         )
 
 @app.post("/stream")
@@ -149,7 +155,8 @@ def stream_query(request: QueryRequest, db: Session = Depends(get_db)):
 
         hybrid_engine = HybridRetriever(
             vector_retriever=base_vector_retriever,
-            chunk_repo=chunk_repo
+            chunk_repo=chunk_repo,
+            graph_retriever=graph_retriever
         )
 
         pipeline = RAGPipeline(
@@ -170,7 +177,8 @@ def stream_query(request: QueryRequest, db: Session = Depends(get_db)):
                 "year": src.year,
                 "section": getattr(src, 'section_title', getattr(src, 'section', 'Unknown')),
                 "score": getattr(src, 'score', 0.0),
-                "paper_url": src.paper_url 
+                "paper_url": src.paper_url ,
+    
             }
             for src in sources
         ]
@@ -195,10 +203,15 @@ def stream_query(request: QueryRequest, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 @app.post("/ingest")
+@traceable(name="ingest")
 def ingest(
     request: IngestRequest,
-    db: Session = Depends(get_db)
+    db: Session = Depends(
+        get_db
+    )
 ):
+
+    graph_ingestor = None
 
     try:
 
@@ -252,18 +265,54 @@ def ingest(
                 xml_path=
                     parsed_paper.xml_path
             )
+
+            # keeping your commit
             db.commit()
+
             graph_ingestor.ingest_paper(
                 parsed_paper
             )
 
-        pinecone_client = (
-            PineconeClient()
+            entities = (
+                entity_extractor.extract(
+                    parsed_paper
+                )
+            )
+
+            graph_ingestor.ingest_entities(
+                parsed_paper,
+                entities
+            )
+
+        return {
+            "status":
+                "success",
+
+            "papers_processed":
+                len(parsed_papers),
+
+            "chunks_created":
+                total_chunks
+        }
+
+    except Exception as e:
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
         )
 
-        embedding_provider = (
-            JinaEmbeddingProvider()
-        )
+    finally:
+
+        if graph_ingestor:
+
+            graph_ingestor.close()
+@app.post("/process-jobs")
+def process_jobs(
+    db: Session = Depends(get_db)
+):
+
+    try:
 
         worker = EmbeddingWorker(
             ingestion_repo=
@@ -283,27 +332,21 @@ def ingest(
 
         while True:
 
-            result = worker.run_batch(
+            processed = worker.run_batch(
                 batch_size=100
             )
-
-            processed = result
 
             total_processed += processed
 
             if processed == 0:
                 break
+
         return {
             "status": "success",
-            "papers_processed":
-                len(parsed_papers),
-
-            "chunks_created":
-                total_chunks,
-
             "vectors_uploaded":
                 total_processed
         }
+
     except Exception as e:
 
         raise HTTPException(

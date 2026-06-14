@@ -3,30 +3,36 @@ import json
 from generation.openrouter_generator import (
     OpenRouterGenerator
 )
+# ingestion/ingestion_pipeline.py
+from utils.logging_config import setup_pipeline_logger
 
+# Instantiate the module-level logger at the top of the file
+logger = setup_pipeline_logger("ingestion_pipeline")
 
 class EntityExtractor:
 
-    def __init__(
-        self,
-        generator: OpenRouterGenerator
-    ):
-        self.generator = generator
+    def __init__(self):
+
+        self.generator = (
+            OpenRouterGenerator()
+        )
 
     def extract(
         self,
         paper
-    ) -> dict:
+    ):
 
         prompt = f"""
-Extract the following from this research paper.
+Extract important entities from this paper.
 
-Return JSON ONLY.
+Return ONLY JSON.
+
+Format:
 
 {{
-  "methods": [],
-  "datasets": [],
-  "benchmarks": []
+    "methods": [],
+    "datasets": [],
+    "benchmarks": []
 }}
 
 Title:
@@ -36,14 +42,20 @@ Abstract:
 {paper.abstract}
 """
 
-        response = self.generator.generate(
-            query="Extract entities",
-            context=prompt
+        response = (
+            self.generator.generate(
+                query="entity extraction",
+                context=prompt
+            )
         )
 
         try:
+
+            start = response.find("{")
+            end = response.rfind("}") + 1
+            logger.info(f"found entites")
             return json.loads(
-                response
+                response[start:end]
             )
 
         except Exception:
