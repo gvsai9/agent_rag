@@ -33,6 +33,7 @@ class IngestionPipeline:
             query=query,
             limit=limit
         )
+        
         parsed_paper_list = []
         for metadata in papers:
 

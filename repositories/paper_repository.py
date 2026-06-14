@@ -9,7 +9,8 @@ from utils.logging_config import setup_pipeline_logger
 # Instantiate the module-level logger at the top of the file
 logger = setup_pipeline_logger("ingestion_pipeline")
 
-
+from sqlalchemy import select
+from models.paper import PaperMetadata
 # This is a repository class for managing Paper records in the database. It extends the BaseRepository, which provides a common interface for database interactions. The PaperRepository includes methods for retrieving a paper by its Paper ID and for upserting (inserting or updating) a paper record based on its Paper ID. The upsert method checks if a paper with the given Paper ID already exists; if it does, it updates the existing record's title, year, and XML path. If it doesn't exist, it creates a new paper record and adds it to the session before committing the changes to the database.
 class PaperRepository(
     BaseRepository
@@ -79,3 +80,20 @@ class PaperRepository(
         self.session.commit()
 
         return paper
+        def exists(
+        self,
+        paper_id: str
+    ) -> bool:
+
+            stmt = (
+                select(PaperMetadata)
+                .where(
+                    PaperMetadata.paper_id == paper_id
+                )
+            )
+
+        return (
+            self.db.execute(stmt)
+            .scalar_one_or_none()
+            is not None
+        )

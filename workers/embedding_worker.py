@@ -16,6 +16,7 @@ from vectorstores.pinecone_client import (
 from langsmith import traceable
 
 from utils.logging_config import setup_pipeline_logger
+from sqlalchemy import text
 
 # Instantiate the module-level logger at the top of the file
 logger = setup_pipeline_logger("ingestion_pipeline")
@@ -176,7 +177,9 @@ Content:
             )
             logger.info("payload is upserted")
             for job in jobs:
-
+                self.ingestion_repo.session.execute(
+    text("SELECT 1")
+)
                 self.ingestion_repo\
                     .mark_completed(
                         job.id

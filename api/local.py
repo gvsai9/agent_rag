@@ -333,7 +333,7 @@ def process_jobs(
         while True:
 
             processed = worker.run_batch(
-                batch_size=100
+                batch_size=1
             )
 
             total_processed += processed
