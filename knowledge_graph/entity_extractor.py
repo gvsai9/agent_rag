@@ -8,6 +8,7 @@ from utils.logging_config import setup_pipeline_logger
 
 # Instantiate the module-level logger at the top of the file
 logger = setup_pipeline_logger("ingestion_pipeline")
+from langsmith import traceable
 
 class EntityExtractor:
 
@@ -16,7 +17,7 @@ class EntityExtractor:
         self.generator = (
             OpenRouterGenerator()
         )
-
+    @traceable(name="extract_entites")
     def extract(
         self,
         paper

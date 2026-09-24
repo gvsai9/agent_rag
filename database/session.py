@@ -23,9 +23,8 @@ engine = create_engine(
     DATABASE_URL,
     echo=True,
     pool_pre_ping=True,
-    pool_recycle=180
+    pool_recycle=300
 )
-
 
 # The sessionmaker function is used to create a session factory, which can be used to create new sessions for interacting with the database.
 SessionLocal = sessionmaker(

@@ -6,6 +6,7 @@ from embeddings.jina_provider import JinaEmbeddingProvider
 from vectorstores.pinecone_client import PineconeClient
 from workers.embedding_worker import EmbeddingWorker
 
+
 def setup_worker():
 # 2. Spin up an active database session instance
     session = SessionLocal()

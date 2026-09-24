@@ -12,7 +12,7 @@ class JinaReranker(Reranker):
     def __init__(self):
         self.api_key = os.getenv("JINA_API_KEY")
         if not self.api_key:
-            raise ValueError("💥 JINA_API_KEY is missing from environment variables.")
+            raise ValueError("JINA_API_KEY is missing from environment variables.")
         
 
     @traceable

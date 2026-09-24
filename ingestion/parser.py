@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 
 from models.section import Section
 from models.parsed_paper import ParsedPaper
+from langsmith import traceable
 
 # This function takes the XML content of a paper as input and parses it to extract the PMCID, title, abstract, and sections of the paper. It returns a ParsedPaper object that contains this information. The function uses BeautifulSoup to navigate the XML structure of the paper and extract the relevant information from the appropriate tags.
 def parse_xml(xml_content: str) -> ParsedPaper:

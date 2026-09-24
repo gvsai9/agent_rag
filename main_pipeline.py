@@ -26,8 +26,8 @@ if __name__ == "__main__":
         )
     )
     parsed_paper_list = pipeline.ingest_query(
-        "agentic ai",
-        limit=1
+        "deep learning",
+        limit=10
     )
     for parsed_paper in parsed_paper_list:
         chunks = chunk_paper(

@@ -1,5 +1,6 @@
 # This module contains the logic for chunking the parsed papers into smaller pieces of text that can be used for retrieval and question answering. The main function in this module is chunk_paper, which takes a ParsedPaper object as input and returns a list of Chunk objects. Each Chunk object represents a chunk of text extracted from the paper, along with metadata such as the PMCID, section title, and chunk index. The chunking process is designed to create chunks of approximately 400 words, while ensuring that each chunk contains complete paragraphs and does not split sentences in the middle. This allows us to maintain the coherence and context of the text within each chunk, which is important for accurate retrieval and question answering.
 import logging
+from langsmith import traceable
 
 from models import paper
 from models.chunk import Chunk
@@ -14,6 +15,7 @@ TARGET_WORDS = 400
 MIN_WORDS = 200
 
 # This function takes a ParsedPaper object as input and returns a list of Chunk objects. It iterates through each section of the paper, splits the section text into paragraphs, and then groups the paragraphs into chunks based on the target word count. The function ensures that each chunk contains complete paragraphs and does not split sentences in the middle. It also assigns a unique chunk ID to each chunk, which combines the PMCID, section title, and chunk index. This allows us to easily identify and retrieve specific chunks of text from the database when needed.
+@traceable(name="chunking")
 def chunk_paper(
     paper: ParsedPaper
 ) -> list[Chunk]:
