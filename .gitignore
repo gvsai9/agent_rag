@@ -7,3 +7,4 @@ storage/
 logs/
 downloads
 parsed
+pipeline_execution.log
